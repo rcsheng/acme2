@@ -45,6 +45,10 @@ var db = {
     {
       _data[categoryName].push({name: productName});
     }
+    else {
+      _data[categoryName] = [];
+      _data[categoryName].push({name: productName});
+    }
   },
   deleteProduct: function(categoryName,index)
   {
@@ -53,7 +57,7 @@ var db = {
       _data[categoryName].splice(index,1);
     }
   }
-}	
+};	
 	
 
 module.exports = db;

@@ -1,4 +1,6 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 var app = express();
 
 var swig = require('swig');
@@ -10,26 +12,20 @@ app.engine('html',swig.renderFile);
 
 var db = require('./db');
 
-var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
 
-app.use(bodyParser.urlencoded({ extended: false }))
-
-var router = express.Router();
-var categoriesRouter = require('./routes/categories');
-
-app.use('/categories',categoriesRouter);
 
 app.get('/',function(req,res)
 {
-	//console.log('here');
 	res.render('index',{categories: db.getCategories()});
-
 
 });
 
-app.listen(3000,function(err)
+app.use('/categories',require('./routes/categories'));
+
+
+app.listen(process.env.PORT,function()
 {
-	if (err)
-		console.error(err);
-	console.log("app listening");
-})
+	console.log('app listening ' + process.env.PORT);
+});
